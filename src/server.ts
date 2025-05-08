@@ -1,6 +1,7 @@
 import http from 'node:http';
-import { handleUsers } from './controllers/user.controller';
-import { BASE_URL } from './utils/consts';
+import { handleUsers } from './controllers/user.controller.js';
+import { BASE_URL, colorize } from './utils/consts.js';
+import { Colors } from './utils/types.js';
 
 const PORT = 3000;
 
@@ -15,5 +16,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`\x1b[36mServer listening on port: ${PORT}\x1b[0m`);
+  console.log(colorize(`Server listening on port: ${PORT}`, Colors.CYAN));
 });

@@ -1,4 +1,5 @@
-import { User } from '../models/user.model.';
+import { User } from '../models/user.model.js';
+import { v4 as uuidv4 } from 'uuid';
 
 let users: User[] = [];
 
@@ -11,8 +12,13 @@ function getById(id: string) {
 }
 
 function createOne(data: User) {
-  users.push(data);
-  return users;
+  const newUser = {
+    id: uuidv4(),
+    ...data,
+  };
+  users.push(newUser);
+
+  return newUser;
 }
 
 function updateOne(id: string, data: User) {
@@ -30,4 +36,4 @@ function deleteOne(id: string) {
   return users;
 }
 
-export { getAll, getById, createOne, deleteOne };
+export default { getAll, getById, createOne, updateOne, deleteOne };

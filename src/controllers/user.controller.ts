@@ -1,7 +1,8 @@
-//Обрабатывает входящие HTTP-запросы, вызывает соответствующие методы из services/ и формирует HTTP-ответы.
-
 import { IncomingMessage, ServerResponse } from 'node:http';
-import { BASE_URL } from '../utils/consts';
+import { BASE_URL } from '../utils/consts.js';
+import user from '../services/user.service.js';
+import { Methods } from '../utils/types.js';
+import { handleRequest } from '../utils/handleRequest.js';
 
 interface IHandleUsers {
   req: IncomingMessage;
@@ -14,14 +15,6 @@ export function handleUsers({ req, res }: IHandleUsers) {
   if (method === Methods.GET) {
     const id = url?.replace(`${BASE_URL}/`, '');
 
-    if (id) {
-    }
+    handleRequest(res, id ? user.getById(id) : user.getAll());
   }
-}
-
-enum Methods {
-  GET = 'GET',
-  POST = 'POST',
-  PUT = 'PUT',
-  DELETE = 'DELETE',
 }
