@@ -1,13 +1,17 @@
 import http from 'node:http';
+import dotenv from 'dotenv';
 import { handleUsers } from './controllers/user.controller.js';
 import { BASE_URL, colorize } from './utils/consts.js';
 import { Colors } from './utils/types.js';
 
-const PORT = 3000;
+dotenv.config();
+
+const PORT = process.env.PORT;
 
 const server = http.createServer((req, res) => {
   if (req.url?.startsWith(BASE_URL)) {
     handleUsers({ req, res });
+
     return;
   }
 

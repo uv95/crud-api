@@ -1,39 +1,120 @@
 import { User } from '../models/user.model.js';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4, validate } from 'uuid';
+import { isUserValid } from '../utils/isUserValid.js';
 
 let users: User[] = [];
 
 function getAll() {
-  return users;
+  return {
+    data: users,
+    status: 200,
+  };
 }
 
 function getById(id: string) {
-  return users.find((user) => user.id === id);
+  if (!validate(id)) {
+    return {
+      data: null,
+      status: 400,
+      message: 'ID is invalid!',
+    };
+  }
+
+  const user = users.find((user) => user.id === id);
+
+  if (!user) {
+    return {
+      data: null,
+      status: 404,
+      message: "User doesn't exist!",
+    };
+  }
+
+  return {
+    data: user,
+    status: 200,
+  };
 }
 
 function createOne(data: User) {
+  if (!isUserValid(data)) {
+    return {
+      data: null,
+      status: 400,
+      message: 'Required fields not provided!',
+    };
+  }
+
   const newUser = {
     id: uuidv4(),
     ...data,
   };
+
   users.push(newUser);
 
-  return newUser;
+  return {
+    data: newUser,
+    status: 201,
+  };
 }
 
 function updateOne(id: string, data: User) {
+  if (!validate(id)) {
+    return {
+      data: null,
+      status: 400,
+      message: 'ID is invalid!',
+    };
+  }
+
+  const userExists = users.find((user) => user.id === id);
+
+  if (!userExists) {
+    return {
+      data: null,
+      status: 404,
+      message: "User doesn't exist!",
+    };
+  }
+
   const updatedUser = {
     id,
     ...data,
   };
+
   users = users.map((user) => (user.id === id ? updatedUser : user));
 
-  return updatedUser;
+  return {
+    data: updatedUser,
+    status: 200,
+  };
 }
 
 function deleteOne(id: string) {
+  if (!validate(id)) {
+    return {
+      data: null,
+      status: 400,
+      message: 'ID is invalid!',
+    };
+  }
+
+  const userExists = users.find((user) => user.id === id);
+
+  if (!userExists) {
+    return {
+      data: null,
+      status: 404,
+      message: "User doesn't exist!",
+    };
+  }
+
   users = users.filter((user) => user.id !== id);
-  return users;
+
+  return {
+    data: null,
+    status: 204,
+  };
 }
 
 export default { getAll, getById, createOne, updateOne, deleteOne };
