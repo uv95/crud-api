@@ -7,7 +7,7 @@ let users: User[] = [];
 function getAll() {
   return {
     data: users,
-    status: 200,
+    statusCode: 200,
   };
 }
 
@@ -15,7 +15,7 @@ function getById(id: string) {
   if (!validate(id)) {
     return {
       data: null,
-      status: 400,
+      statusCode: 400,
       message: 'ID is invalid!',
     };
   }
@@ -25,14 +25,14 @@ function getById(id: string) {
   if (!user) {
     return {
       data: null,
-      status: 404,
+      statusCode: 404,
       message: "User doesn't exist!",
     };
   }
 
   return {
     data: user,
-    status: 200,
+    statusCode: 200,
   };
 }
 
@@ -40,7 +40,7 @@ function createOne(data: User) {
   if (!isUserValid(data)) {
     return {
       data: null,
-      status: 400,
+      statusCode: 400,
       message: 'Required fields not provided!',
     };
   }
@@ -54,7 +54,7 @@ function createOne(data: User) {
 
   return {
     data: newUser,
-    status: 201,
+    statusCode: 201,
   };
 }
 
@@ -62,7 +62,7 @@ function updateOne(id: string, data: User) {
   if (!validate(id)) {
     return {
       data: null,
-      status: 400,
+      statusCode: 400,
       message: 'ID is invalid!',
     };
   }
@@ -72,7 +72,7 @@ function updateOne(id: string, data: User) {
   if (!userExists) {
     return {
       data: null,
-      status: 404,
+      statusCode: 404,
       message: "User doesn't exist!",
     };
   }
@@ -86,7 +86,7 @@ function updateOne(id: string, data: User) {
 
   return {
     data: updatedUser,
-    status: 200,
+    statusCode: 200,
   };
 }
 
@@ -94,7 +94,7 @@ function deleteOne(id: string) {
   if (!validate(id)) {
     return {
       data: null,
-      status: 400,
+      statusCode: 400,
       message: 'ID is invalid!',
     };
   }
@@ -104,7 +104,7 @@ function deleteOne(id: string) {
   if (!userExists) {
     return {
       data: null,
-      status: 404,
+      statusCode: 404,
       message: "User doesn't exist!",
     };
   }
@@ -113,7 +113,7 @@ function deleteOne(id: string) {
 
   return {
     data: null,
-    status: 204,
+    statusCode: 204,
   };
 }
 

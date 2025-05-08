@@ -15,6 +15,17 @@ export function handleUsers({ req, res }: IHandleUsers) {
   if (method === Methods.GET) {
     const id = url?.replace(`${BASE_URL}/`, '');
 
-    handleRequest(res, id ? user.getById(id) : user.getAll());
+    if (id) {
+      return handleRequest(res, user.getById(id));
+    }
+
+    handleRequest(res, user.getAll());
+  }
+
+  if (method === Methods.POST) {
+  }
+  if (method === Methods.PUT) {
+  }
+  if (method === Methods.DELETE) {
   }
 }

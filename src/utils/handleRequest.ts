@@ -1,10 +1,10 @@
 import { ServerResponse } from 'node:http';
 import { colorize } from './consts.js';
-import { Colors } from './types.js';
+import { Colors, Response } from './types.js';
 
-export const handleRequest = <T>(res: ServerResponse, result: T) => {
+export const handleRequest = <T>(res: ServerResponse, result: Response<T>) => {
   try {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.writeHead(result.statusCode, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(result));
   } catch (error) {
     res.writeHead(500, { 'Content-Type': 'application/json' });

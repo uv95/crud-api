@@ -14,3 +14,9 @@ export enum Methods {
   PUT = 'PUT',
   DELETE = 'DELETE',
 }
+
+export interface Response<T> {
+  data: T | null;
+  statusCode: number;
+  message?: string;
+}
