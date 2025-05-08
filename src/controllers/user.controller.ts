@@ -11,10 +11,9 @@ interface IHandleUsers {
 
 export function handleUsers({ req, res }: IHandleUsers) {
   const { method, url } = req;
+  const id = url?.replace(`${BASE_URL}`, '').replace('/', '') || '';
 
   if (method === Methods.GET) {
-    const id = url?.replace(`${BASE_URL}/`, '');
-
     if (id) {
       return handleRequest(res, user.getById(id));
     }
@@ -23,9 +22,20 @@ export function handleUsers({ req, res }: IHandleUsers) {
   }
 
   if (method === Methods.POST) {
+    let body = '';
+    req.on('data', (chunk) => (body += chunk.toString()));
+    req.on('end', () => handleRequest(res, user.createOne(JSON.parse(body))));
   }
+
   if (method === Methods.PUT) {
+    let body = '';
+    req.on('data', (chunk) => (body += chunk.toString()));
+    req.on('end', () =>
+      handleRequest(res, user.updateOne(id, JSON.parse(body)))
+    );
   }
+
   if (method === Methods.DELETE) {
+    handleRequest(res, user.deleteOne(id));
   }
 }
