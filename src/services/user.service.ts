@@ -41,7 +41,7 @@ function createOne(data: User) {
     return {
       data: null,
       statusCode: 400,
-      message: 'Required fields not provided!',
+      message: 'Required fields not provided, or data type is wrong!',
     };
   }
 
