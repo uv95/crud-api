@@ -5,7 +5,7 @@
   "scripts": {
     "start:dev": "nodemon --watch src --exec 'ts-node' src/server.ts",
     "start:multi": "cross-env MODE=cluster nodemon --watch src --exec 'ts-node' src/cluster.ts",
-    "start:prod": "tsc && node dist/server.js",
+    "start:prod": "webpack && node dist/bundle.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
