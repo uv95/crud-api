@@ -1,18 +1,16 @@
 import http from 'node:http';
-import dotenv from 'dotenv';
-import { handleUsers } from './controllers/user.controller.js';
-import { BASE_URL, PRIMARY_PORT } from './utils/consts.js';
+import { handleUsers } from './controllers/user.controller';
+import { BASE_URL, PRIMARY_PORT } from './utils/consts';
 import { styleText } from 'node:util';
 
-dotenv.config();
-
 const server = http.createServer((req, res) => {
-  console.log(
-    styleText(
-      ['yellow'],
-      `Worker ${process.pid} handling request on port ${process.env.PORT}`
-    )
-  ); // for round-robin algoritm check
+  process.env.MODE === 'cluster' &&
+    console.log(
+      styleText(
+        ['yellow'],
+        `Worker ${process.pid} handling request on port ${process.env.PORT}`
+      )
+    );
 
   if (req.url?.startsWith(BASE_URL)) {
     handleUsers({ req, res });

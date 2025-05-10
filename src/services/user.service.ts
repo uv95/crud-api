@@ -1,8 +1,15 @@
-import { User } from '../models/user.model.js';
+import { User } from '../models/user.model';
 import { v4 as uuidv4, validate } from 'uuid';
-import { isUserValid } from '../utils/isUserValid.js';
+import { isUserValid } from '../utils/isUserValid';
+import cluster from 'cluster';
 
 let users: User[] = [];
+
+if (cluster.isWorker) {
+  process.on('message', (message: { users: User[] }) => {
+    users = message.users as User[];
+  });
+}
 
 function getAll() {
   return {
@@ -52,6 +59,10 @@ function createOne(data: User) {
 
   users.push(newUser);
 
+  if (cluster.isWorker && process.send) {
+    process.send({ users });
+  }
+
   return {
     data: newUser,
     statusCode: 201,
@@ -84,6 +95,10 @@ function updateOne(id: string, data: User) {
 
   users = users.map((user) => (user.id === id ? updatedUser : user));
 
+  if (cluster.isWorker && process.send) {
+    process.send({ users });
+  }
+
   return {
     data: updatedUser,
     statusCode: 200,
@@ -110,6 +125,10 @@ function deleteOne(id: string) {
   }
 
   users = users.filter((user) => user.id !== id);
+
+  if (cluster.isWorker && process.send) {
+    process.send({ users });
+  }
 
   return {
     data: null,

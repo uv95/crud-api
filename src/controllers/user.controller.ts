@@ -1,8 +1,8 @@
 import { IncomingMessage, ServerResponse } from 'node:http';
-import { BASE_URL } from '../utils/consts.js';
-import user from '../services/user.service.js';
-import { Methods } from '../utils/types.js';
-import { handleRequest } from '../utils/handleRequest.js';
+import { BASE_URL } from '../utils/consts';
+import user from '../services/user.service';
+import { Methods } from '../utils/types';
+import { handleRequest } from '../utils/handleRequest';
 
 interface IHandleUsers {
   req: IncomingMessage;

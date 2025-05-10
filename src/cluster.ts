@@ -1,8 +1,9 @@
 import cluster from 'node:cluster';
 import { cpus } from 'node:os';
-import { PRIMARY_PORT } from './utils/consts.js';
+import { PRIMARY_PORT } from './utils/consts';
 import { styleText } from 'node:util';
-import { runBalancer } from './load-balancer.js';
+import { runBalancer } from './load-balancer';
+import { User } from './models/user.model';
 
 const numWorkers = cpus().length - 1;
 
@@ -13,7 +14,11 @@ if (cluster.isPrimary) {
 
   for (let i = 0; i < numWorkers; i++) {
     const workerEnv = { PORT: (+PRIMARY_PORT + 1 + i).toString() };
-    cluster.fork(workerEnv);
+    const worker = cluster.fork(workerEnv);
+
+    worker.on('message', (message) => {
+      sendToAllWorkers(message);
+    });
   }
 
   cluster.on('exit', (worker) => {
@@ -21,5 +26,13 @@ if (cluster.isPrimary) {
     cluster.fork();
   });
 } else {
-  import('./server.js');
+  import('./server');
+}
+
+function sendToAllWorkers(message: { users: User[] }) {
+  if (cluster.workers) {
+    for (const worker of Object.values(cluster.workers)) {
+      worker?.isConnected() && worker.send(message);
+    }
+  }
 }

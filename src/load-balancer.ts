@@ -1,6 +1,6 @@
 import http from 'node:http';
 import { styleText } from 'node:util';
-import { PRIMARY_PORT } from './utils/consts.js';
+import { PRIMARY_PORT } from './utils/consts';
 
 export function runBalancer(numWorkers: number) {
   const ports = Array.from(

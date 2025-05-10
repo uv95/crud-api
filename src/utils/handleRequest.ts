@@ -1,6 +1,6 @@
 import { ServerResponse } from 'node:http';
 import { styleText } from 'node:util';
-import { Response } from './types.js';
+import { Response } from './types';
 
 export const handleRequest = <T>(res: ServerResponse, result: Response<T>) => {
   try {
