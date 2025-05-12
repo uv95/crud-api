@@ -8,12 +8,13 @@ import {
   getResponseHeaders,
   invalidDataTestCases,
   res,
+  TEST_ID,
   testUser,
 } from './utils';
 
 jest.mock('uuid', () => ({
   validate: jest.fn(),
-  v4: jest.fn(),
+  v4: jest.fn(() => TEST_ID),
 }));
 
 const { users } = user;
@@ -41,22 +42,23 @@ describe('Scenario 2', () => {
 
   test('should create new user', () => {
     const mockedResponse = {
-      data: testUser,
+      data: { ...testUser, id: TEST_ID },
       statusCode: 201,
     };
     const req = {
       method: Methods.POST,
       url: '/api/users',
-      on: addMockedEventListener({ ...testUser }),
+      on: addMockedEventListener(mockedResponse.data),
     } as any;
 
     jest.spyOn(user, 'createOne');
     handleUsers({ req, res });
 
+    expect(uuidv4).toHaveBeenCalled();
     expect(res.writeHead).toHaveBeenCalledWith(
       ...getResponseHeaders(mockedResponse.statusCode)
     );
-    expect(user.createOne).toHaveBeenCalledWith({ ...testUser });
+    expect(user.createOne).toHaveBeenCalledWith(mockedResponse.data);
     expect(getResponse()).toEqual(mockedResponse);
     expect(users.length).toBe(1);
   });
@@ -72,7 +74,7 @@ describe('Scenario 2', () => {
 
       const req = {
         method: Methods.PUT,
-        url: `/api/users/${testUser.id}`,
+        url: `/api/users/${TEST_ID}`,
         on: addMockedEventListener({ ...invalidData }),
       } as any;
 
@@ -84,7 +86,7 @@ describe('Scenario 2', () => {
       expect(res.writeHead).toHaveBeenCalledWith(
         ...getResponseHeaders(mockedResponse.statusCode)
       );
-      expect(user.updateOne).toHaveBeenCalledWith(testUser.id, invalidData);
+      expect(user.updateOne).toHaveBeenCalledWith(TEST_ID, invalidData);
       expect(getResponse()).toEqual(mockedResponse);
     }
   );

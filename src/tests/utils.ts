@@ -50,8 +50,9 @@ export const invalidDataTestCases = [
 ];
 
 export const testUser = {
-  id: '1',
   username: 'Test User',
   hobbies: [],
   age: 30,
 };
+
+export const TEST_ID = '12345';

@@ -43,7 +43,7 @@ function getById(id: string) {
   };
 }
 
-function createOne(data: User) {
+function createOne(data: Omit<User, 'id'>) {
   if (!isUserValid(data)) {
     return {
       data: null,
