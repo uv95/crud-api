@@ -88,6 +88,14 @@ function updateOne(id: string, data: Omit<User, 'id'>) {
     };
   }
 
+  if (!isUserValid(data)) {
+    return {
+      data: null,
+      statusCode: 400,
+      message: 'Data type is wrong!',
+    };
+  }
+
   const updatedUser = {
     id,
     ...data,
