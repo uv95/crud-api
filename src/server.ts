@@ -25,3 +25,8 @@ const server = http.createServer((req, res) => {
 server.listen(PRIMARY_PORT, () => {
   console.log(styleText(['cyan'], `Server listening on port: ${PRIMARY_PORT}`));
 });
+
+process.on('unhandledRejection', (error: Error) => {
+  console.log('UNHANDLED REJECTION ❗️', error.message);
+  process.exit(1);
+});

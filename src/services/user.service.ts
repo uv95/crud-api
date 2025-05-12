@@ -69,7 +69,7 @@ function createOne(data: User) {
   };
 }
 
-function updateOne(id: string, data: User) {
+function updateOne(id: string, data: Omit<User, 'id'>) {
   if (!validate(id)) {
     return {
       data: null,
@@ -136,4 +136,4 @@ function deleteOne(id: string) {
   };
 }
 
-export default { getAll, getById, createOne, updateOne, deleteOne };
+export default { users, getAll, getById, createOne, updateOne, deleteOne };
